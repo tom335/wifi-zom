@@ -13,8 +13,11 @@ z = StringVar()
 w = Message(root, textvariable=z, width=200, bg='#ededed', anchor=NW, font='Menlo 12')
 w.pack(fill=BOTH, expand=1, side=LEFT)
 
-#t = Text(w, state=DISABLED)
-#t.pack(side=LEFT)
+opt_val = StringVar()
+opt_val.set('fr777')
+
+opts = OptionMenu(root, opt_val, 'fr777', 'ale-hotspot')
+opts.pack(side=TOP)
 
 def connect_wifi():
     x = threading.Thread(target=run_process)
@@ -22,10 +25,12 @@ def connect_wifi():
     return
 
 def run_process():
+    ap = opt_val.get()
+    # TODO provide access point to command
     cmd = './wifi up ale'
     process = subprocess.Popen(cmd.split(),
         stdout=subprocess.PIPE, universal_newlines=True)
-    
+
     with process as p:
         message = ''
         for line in p.stdout:
