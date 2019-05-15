@@ -1,5 +1,9 @@
 #!/bin/bash
 
-echo 'Hello world'
+echo "Rising up wifi interface..."
 
-sleep 1; echo 'zap'
+sleep 2
+echo "Connecting to access point"
+
+sleep 2
+echo 'Connected'
