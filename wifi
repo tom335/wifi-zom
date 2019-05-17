@@ -1,9 +1,41 @@
 #!/bin/bash
 
-echo "Rising up wifi interface..."
+opt=$1
 
-sleep 2
-echo "Connecting to access point"
+function kill_old_processes {
+    wpa_pid=$(ps -A|grep 'wpa_sup'| awk '{ print $1 }')
 
+    echo 'WPA pid: '$wpa_pid
+
+    # killing processes
+    if [ $wpa_pid ]
+    then
+        echo 'Finishing old processes...'
+        kill $(ps -A|grep 'dhcpcd'| awk '{ print $1 }')
+        kill $wpa_pid 
+    fi
+}
+
+
+if [ "$opt" == 'down' ]
+then
+    kill_old_processes
+    exit
+fi
+
+if [ "$opt" == 'lolis-fr888' ]
+then
+	conf=/home/ginetom/lolis-fr888.conf
+else
+    conf=/home/ginetom/fr1777.conf
+fi
+
+
+
+kill_old_processes
+
+# wait before reconnect
 sleep 2
-echo 'Connected'
+
+wpa_supplicant -B -i wlp3s0 -c $conf
+dhcpcd wlp3s0

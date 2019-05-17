@@ -10,24 +10,29 @@ root.geometry('400x200+100+100')
 
 z = StringVar()
 
-w = Message(root, textvariable=z, width=200, bg='#ededed', anchor=NW, font='Menlo 12')
+w = Message(root, textvariable=z, width=200, bg='#ededed', anchor=NW, font='Source-Code-Pro 12')
 w.pack(fill=BOTH, expand=1, side=LEFT)
 
 opt_val = StringVar()
-opt_val.set('fr777')
+opt_val.set('fr1777')
 
-opts = OptionMenu(root, opt_val, 'fr777', 'ale-hotspot')
+opts = OptionMenu(root, opt_val, 'fr1777', 'lolis-fr888')
 opts.pack(side=TOP)
 
 def connect_wifi():
-    x = threading.Thread(target=run_process)
+    ap = opt_val.get()
+    cmd = 'sudo /home/ginetom/dev/wifi-zom/wifi ' + ap
+    x = threading.Thread(target=run_process, args=(cmd,))
     x.start()
     return
 
-def run_process():
-    ap = opt_val.get()
-    # TODO provide access point to command
-    cmd = './wifi up ale'
+def disconnect():
+    cmd = 'sudo /home/ginetom/dev/wifi-zom/wifi down'
+    x = threading.Thread(target=run_process, args=(cmd,))
+    x.start()
+    return
+
+def run_process(cmd):
     process = subprocess.Popen(cmd.split(),
         stdout=subprocess.PIPE, universal_newlines=True)
 
@@ -38,6 +43,9 @@ def run_process():
             z.set(message)
 
 b = Button(root, text='Connect', command=connect_wifi)
+b.pack(side=RIGHT)
+
+b = Button(root, text='Disconnect', command=disconnect)
 b.pack(side=RIGHT)
 
 root.mainloop()
